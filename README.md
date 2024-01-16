@@ -1,11 +1,12 @@
 # HL_annotation_toolkit
-The Hunt Lab Annotation toolkit helps in manipulation of gff and gtf annotation files. It can also generate annotation statistics and extract of features of interest from provided annotation files. 
+The Hunt Lab Annotation toolkit helps in manipulation of gff and gtf annotation files. It can also generate annotation statistics and extract features of interest from provided annotation files. 
 
 # Installation
 The scripts can be accessed by simply cloning the git repository to your local machine.
 
 ```bash
 git clone <copied url>
+cd annotation_toolkit
 ```
 
 # Pre-requisites
