@@ -51,6 +51,7 @@ python run.py -c <path/to/text_file_with_transcript_ids> <path/to/annotation_fil
 4. The total transcripts and genes present in an annotation file can be compared with a comparison file to identify the novel and matching features.<br>
 Novel denotes - Transcripts that are present in the input file but not present in the comparison file <br>
 Matching denotes - Both exact matches and partial matches are considered matching transcripts <br>
+NOTE: This functionality works better with GTF inputs
 ```bash
 python run.py -i <path/to/comparison_annotation_file> <path/to/annotation_file>
 ```

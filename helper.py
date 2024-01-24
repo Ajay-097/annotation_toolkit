@@ -29,10 +29,10 @@ class Annotation :
         for entry in annotation_df['attributes'].str.split(';'):
             attr_dict = {}
             for attr in entry:
-                if(attr != '' and '.gtf' in file_path):
+                if(attr != '' and file_path.endswith('.gtf')):
                     key, value = attr.strip().split(' ')
                     attr_dict[key] = value.strip('"')
-                elif ('.gff3' in file_path):
+                elif file_path.endswith('.gff3') or file_path.endswith('.gff'):
                     key, value = attr.strip().split('=')
                     attr_dict[key] = value.strip()
             attr_dict_list.append(attr_dict)
@@ -136,8 +136,10 @@ class Annotation :
         tmap_table = pd.read_csv(tmap_file_path, sep='\t', comment='#')
         print('\n----------------------------------------------------------------')
         print('No. of transcripts in input file: ', tmap_table['qry_id'].nunique() )
-        print('No. of matching transcripts: ',tmap_table['ref_id'].nunique())
+        print('No. of matching transcripts (including partial matches): ',tmap_table['ref_id'].nunique())
+        print('No. of exact matching transcripts (classcode =): ', tmap_table[tmap_table['class_code'] == '=']['qry_id'].nunique())
         print('No. of novel transcripts: ', tmap_table[tmap_table['class_code'] == 'u']['qry_id'].nunique())
+        
         print('No. of genes in input file: ', tmap_table['qry_gene_id'].nunique())
         print('No. of matching genes: ', tmap_table['ref_gene_id'].nunique())
         print('No. of novel genes: ', tmap_table[tmap_table['class_code']=='u']['qry_gene_id'].nunique())

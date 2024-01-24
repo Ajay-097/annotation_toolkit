@@ -17,7 +17,7 @@ def make_annotations_table(file_path):
             if(attr != '' and '.gtf' in file_path):
                 key, value = attr.strip().split(' ')
                 attr_dict[key] = value.strip('"')
-            elif ('.gff3' in file_path):
+            elif ('.gff3' in file_path or '.gff' in file_path):
                 key, value = attr.strip().split('=')
                 attr_dict[key] = value.strip()
         attr_dict_list.append(attr_dict)
@@ -266,10 +266,6 @@ result = utr5_table['Parent'].isin(transcripts['ID'])
 print(result.value_counts())
 
 
-
-
-
-
 #%%
 from subprocess import call
 from pathlib import Path
@@ -280,19 +276,45 @@ file_name = Path(file_path).name
 
 print(file_name)
 
+#%%
+'''
+Adding additional 40 CDS sequences to the main gff file
+'''
+import csv
 
+main_gff = make_annotations_table('final_novel_added_sorted.gff3')
 
+novel_cds =  make_annotations_table('Eggnog_op/eggnog_output.emapper.genepred.gff')
 
+novel_cds['seqid'] = 'Transcript:' + novel_cds['seqid']
 
+merged = novel_cds.merge(main_gff, left_on='seqid', right_on='ID', how='left')
 
+merged['start_x'] = merged['start_x'] + merged['start_y'] - 1
+merged['end_x'] = merged['end_x'] + merged['start_y'] - 1
 
+merged['score'] = '.'
 
+merged['seqid_x'] = merged['seqid_y']
 
+merged['ID_x'] = 'CDS:' + merged['ID_x']
 
+merged = merged.drop(merged.columns[9:21], axis = 1)
+merged = merged.drop(merged.columns[11:13], axis = 1)
+merged = merged.drop(merged.columns[8], axis = 1)
 
+merged.rename(columns={'ID_x':'ID'}, inplace=True)
 
+final = pd.concat([main_gff,merged], ignore_index=True)
 
+final_gff = get_gff_file(final)
 
+final_gff.to_csv('final_novel_added.gff3', sep='\t', index=False, header=False, quoting=csv.QUOTE_NONE)
+
+# Get the states from the file
+
+temp = main_gff[main_gff['type'] == 'gene']
+print('No. of genes:', temp['ID'].nunique())
 
 
 
