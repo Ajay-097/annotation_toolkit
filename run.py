@@ -69,7 +69,8 @@ def main():
         if comparison_file.suffix not in ['.gtf','.gff3','.gff']:
             parser.exit(status=0, message="Comparison file error: .gtf or .gff3 input required, but received other")
         tmap_file = f'gffcmp.{file_name}.tmap'
-        annotation.compare_annotation_files(args.compare, annotation.file_path, tmap_file)
+        tmap_file_path = os.path.join(file_path.parent, tmap_file)
+        annotation.compare_annotation_files(args.compare, annotation.file_path, tmap_file_path)
         
         gffcmp_directory = os.path.join(annotation.output_path, 'gffcmp_files')
         os.makedirs(gffcmp_directory)
@@ -77,6 +78,11 @@ def main():
         for filename in os.listdir(file_path.parent):
             if filename.startswith('gffcmp'):
                 source_path = os.path.join(file_path.parent, filename)
+                destination_path = os.path.join(gffcmp_directory, filename)
+                shutil.move(source_path, destination_path)
+        for filename in os.listdir(os.getcwd()):
+            if filename.startswith('gffcmp'):
+                source_path = os.path.join(os.getcwd(), filename)
                 destination_path = os.path.join(gffcmp_directory, filename)
                 shutil.move(source_path, destination_path)
         print('Done')

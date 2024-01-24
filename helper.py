@@ -117,7 +117,7 @@ class Annotation :
         pivot_df.rename(columns={'type': 'Feature'}, inplace=True)
         print(pivot_df)
     
-    def compare_annotation_files(self, reference_file, input_file, tmap_file_name):
+    def compare_annotation_files(self, reference_file, input_file, tmap_file_path):
         '''
         Function runs gff compare on the two annotation files and generates a tmap file
         The tmap file is used to calculate the matching statistics
@@ -133,7 +133,7 @@ class Annotation :
             print(f'An error occured: {e}')
             sys.exit(1)
         
-        tmap_table = pd.read_csv(tmap_file_name, sep='\t', comment='#')
+        tmap_table = pd.read_csv(tmap_file_path, sep='\t', comment='#')
         print('\n----------------------------------------------------------------')
         print('No. of transcripts in input file: ', tmap_table['qry_id'].nunique() )
         print('No. of matching transcripts: ',tmap_table['ref_id'].nunique())
