@@ -64,7 +64,9 @@ class Annotation :
         just the annotations for the provided list of transcripts.
         """
         if(transcript_list != None):
-            gff_table = gff_table[gff_table['ID'].str.contains('|'.join(transcript_list), case=False)]
+            search_str = '|'.join(transcript_list)
+            search_str = search_str.replace('.','\.')
+            gff_table = gff_table[gff_table['ID'].str.contains(search_str, case=False)]
         gff_table = gff_table.reset_index(drop=True)
         final_table = gff_table.loc[:,'seqid':'phase']
         attributes = gff_table.loc[:, 'ID':]
@@ -88,7 +90,9 @@ class Annotation :
         just the annotations for the provided list of transcripts.
         """
         if(transcript_list!=None):
-            gtf_table = gtf_table[gtf_table['transcript_id'].str.contains('|'.join(transcript_list))]
+            search_str = '|'.join(transcript_list)
+            search_str = search_str.replace('.','\.')
+            gtf_table = gtf_table[gtf_table['transcript_id'].str.contains(search_str, case=False)]
         gtf_table = gtf_table.reset_index(drop=True)
         final_table = gtf_table.loc[:,'seqid':'phase']
         attributes = gtf_table.loc[:, 'transcript_id':]
